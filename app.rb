@@ -1,6 +1,7 @@
 class Game
   @@array = Array.new(3) { Array.new(3) }
   @@array.each {| row | row.map! {| _ | '_' } }
+  @@end_game = false
 
   def initialize(player1, player2)
     @player1 = player1
@@ -46,12 +47,37 @@ class Game
       end
     end
   end
+
+  def winner
+    if @@array[0][0] == 'X' && @@array[0][1] == 'X' && @@array[0][2] == 'X'
+      puts "Game over, player 1 wins"
+      @@end_game = true
+    end
+  end
+
+  def game_end?
+    @@end_game
+  end
 end
 
-game = Game.new("javi", "pepe")
-game.start_game
-game.print_board
-game.player1_move
-game.print_board
-game.player2_move
-game.print_board
+puts "Enter name for player1"
+player1 = gets.chomp
+puts "Enter name for player2"
+player2 = gets.chomp
+game = Game.new(player1, player2)
+
+while true
+  game.start_game
+  game.print_board
+  game.player1_move
+  game.print_board
+  game.winner
+  if game.game_end? == true
+    break
+  end
+  game.player2_move
+  game.print_board
+  if game.game_end? == true
+    break
+  end
+end
